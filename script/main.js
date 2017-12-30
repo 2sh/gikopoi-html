@@ -64,8 +64,6 @@
 	{
 		if(alternateInstance !== null)
 			clearInterval(alternateInstance);
-		var xy = positionToXY(user.position);
-		$e = $(user.element);
 		
 		var isRight = false;
 		function alternateLegs()
@@ -85,7 +83,9 @@
 		}
 		alternateInstance = setInterval(alternateLegs, MOVE_DURATION/6);
 		alternateLegs();
-		$e.stop().animate({left: xy[0], bottom: xy[1]},
+		
+		var xy = positionToXY(user.position);
+		$(user.element).stop().animate({left: xy[0], bottom: xy[1]},
 			MOVE_DURATION, "linear", function()
 		{
 			clearInterval(alternateInstance);
