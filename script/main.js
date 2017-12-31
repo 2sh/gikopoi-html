@@ -1,7 +1,7 @@
 (function()	
 {
 	var INNER_SQUARE = [40,20];
-	var MOVE_DURATION = 498;
+	var MOVE_DURATION = 600;
 	
 	var eRoom;
 	var eBackground;
@@ -37,12 +37,20 @@
 		return [x, y]
 	}
 	
-	function placeUser(user)
+	function setElementIndex(element, position)
 	{
-		var xy = positionToXY(user.position);
-		user.element.style.left = xy[0] + "px";
-		user.element.style.bottom = xy[1] + "px";
-		directUser(user);
+		var p1 = position[0]+1;
+		var p2 = config.grid[1]-position[1];
+		element.style.zIndex = p1+p2+(p1>p2?p1:p2);
+		console.log(p1, p2, p1+p2+(p1>p2?p1:p2))
+	}
+	
+	function placeElement(element, position)
+	{
+		setElementIndex(element, position);
+		var xy = positionToXY(position);
+		element.style.left = xy[0] + "px";
+		element.style.bottom = xy[1] + "px";
 	}
 	
 	function directUser(user)
@@ -65,6 +73,8 @@
 		if(alternateInstance !== null)
 			clearInterval(alternateInstance);
 		
+		setElementIndex(user.element, user.position);
+		
 		var isRight = false;
 		function alternateLegs()
 		{
@@ -81,7 +91,7 @@
 			
 			isRight = !isRight;
 		}
-		alternateInstance = setInterval(alternateLegs, MOVE_DURATION/6);
+		alternateInstance = setInterval(alternateLegs, MOVE_DURATION/8);
 		alternateLegs();
 		
 		var xy = positionToXY(user.position);
@@ -93,22 +103,34 @@
 		});
 	}
 	
+	function createObject(scale)
+	{
+		var object = document.createElement("div");
+		object.classList.add("square");
+		object.style.visibility = "hidden";
+		var image = document.createElement("img");
+		image.onload = function()
+		{
+			image.onload = undefined;
+			var w = image.clientWidth/scale;
+			var h = image.clientHeight/scale;
+			image.style.width = w + "px";
+			image.style.height = h + "px";
+			image.style.transform = "translateX(-50%)";
+			object.style.visibility = "visible";
+		};
+		object.appendChild(image);
+		return object;
+	}
+	
 	function setUpUser(user)
 	{
-		user.element = document.createElement("div");
+		user.element = createObject(2);
+		user.imgElement = user.element.getElementsByTagName("img")[0];
 		user.element.id = "u" + user.id;
-		user.element.className = "square character";
-		user.imgElement = document.createElement("img");
-		user.imgElement.onload = function() // here until svg
-		{
-			var w = user.imgElement.clientWidth/2;
-			var h = user.imgElement.clientHeight/2;
-			user.imgElement.style.width = w + "px";
-			user.imgElement.style.height = h + "px";
-			user.imgElement.onload = undefined;
-		};
-		user.element.appendChild(user.imgElement);
-		placeUser(user);
+		user.element.classList.add("character");
+		placeElement(user.element, user.position);
+		directUser(user);
 		eRoom.appendChild(user.element);
 	}
 	
@@ -236,15 +258,31 @@
 		});
 	}
 	
+	function placeObjects()
+	{
+		for(var i=0; i<config.objects.length; i++)
+		{
+			var object = config.objects[i];
+			var element = createObject(scale);
+			placeElement(element, object[0]);
+			var img = element.getElementsByTagName("img")[0];
+			img.src =  "rooms/" + roomName + "/" + object[1];
+			eRoom.appendChild(element);
+		}
+	}
+	
 	function setUpRoom()
 	{
 		setScale();
+		placeObjects();
+		
 		for(var userId in users)
 		{
 			var user = users[userId];
 			user.id = userId;
 			setUpUser(user);
 		}
+		
 		final();
 	}
 	
