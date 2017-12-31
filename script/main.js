@@ -56,9 +56,9 @@
 	function directUser(user)
 	{
 		if(user.direction == 1 || user.direction == 2)
-				var side = "front";
-			else
-				var side = "back";
+			var side = "front";
+		else
+			var side = "back";
 		user.imgElement.src = "image/characters/" + user.character +
 				"/" + side + ".png";
 		if(user.direction == 0 || user.direction == 1)
