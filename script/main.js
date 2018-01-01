@@ -78,14 +78,9 @@
 		var isRight = false;
 		function alternateLegs()
 		{
-			if(user.direction == 1 || user.direction == 2)
-				var side = "front";
-			else
-				var side = "back";
-			if(isRight)
-				var leg = "right";
-			else
-				var leg = "left";
+			var side = ((user.direction == 1 || user.direction == 2) ?
+				"front" : "back");
+			var leg = (isRight ? "right" : "left");
 			user.imgElement.src = "image/characters/" +
 				user.character + "/" + side + "_" + leg + "_leg.png";
 			
