@@ -59,8 +59,21 @@
 			var side = "front";
 		else
 			var side = "back";
+		var isSit = false;
+		
+		console.log(user.position);
+		for(var i=0; i<config.sit.length; i++)
+		{
+			if(user.position[0] == config.sit[i][0] &&
+				user.position[1] == config.sit[i][1])
+			{
+				isSit = true;
+				console.log(config.sit[i]);
+				break;
+			}
+		}
 		user.imgElement.src = "image/characters/" + user.character +
-				"/" + side + ".png";
+				"/" + side + (isSit ? "_sit" : "") + ".png";
 		if(user.direction == 0 || user.direction == 1)
 			user.imgElement.style.transform = "scaleX(-1) translateX(50%)";
 		else
