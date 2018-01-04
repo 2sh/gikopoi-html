@@ -147,11 +147,6 @@
 			return direction - 2;
 	}
 	
-	function checkIfBlocked(direction)
-	{
-		var pos = user.position.slice();
-	}
-	
 	function sendDirection(direction) // parts to be moved to server
 	{
 		var user = users[currentUser];
