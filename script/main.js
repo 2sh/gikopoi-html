@@ -61,14 +61,12 @@
 			var side = "back";
 		var isSit = false;
 		
-		console.log(user.position);
 		for(var i=0; i<config.sit.length; i++)
 		{
 			if(user.position[0] == config.sit[i][0] &&
 				user.position[1] == config.sit[i][1])
 			{
 				isSit = true;
-				console.log(config.sit[i]);
 				break;
 			}
 		}
@@ -86,7 +84,10 @@
 		if(alternateInstance !== null)
 			clearInterval(alternateInstance);
 		
-		setElementIndex(user.element, user.position);
+		setTimeout(function()
+		{
+			setElementIndex(user.element, user.position);
+		}, MOVE_DURATION);
 		
 		var isRight = false;
 		function alternateLegs()
@@ -150,6 +151,11 @@
 			return direction - 2;
 	}
 	
+	function checkIfBlocked(direction)
+	{
+		var pos = user.position.slice();
+	}
+	
 	function sendDirection(direction) // parts to be moved to server
 	{
 		var user = users[currentUser];
@@ -178,7 +184,9 @@
 				if(0 <= pos[0]-1) pos[0] -= 1;
 			}
 			
-			var isValid = true;
+			if(user.position[0] == pos[0] &&
+				user.position[1] == pos[1]) return;
+			
 			for(var i=0; i<config.blocked.length; i++)
 			{
 				var block = config.blocked[i];
@@ -193,8 +201,7 @@
 					if(isFullBlock ||
 						block[1][getOppositeDirection(direction)])
 					{
-						isValid = false;
-						break;
+						return
 					}
 				}
 				else if(!isFullBlock &&
@@ -202,17 +209,13 @@
 				{
 					if(block[1][direction])
 					{
-						isValid = false;
-						break;
+						return
 					}
 				}
 			}
 			
-			if(isValid)
-			{
-				user.position = pos;
-				moveUser(user);
-			}
+			user.position = pos;
+			moveUser(user);
 		}
 	}
 	
