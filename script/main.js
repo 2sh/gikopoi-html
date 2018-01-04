@@ -41,8 +41,7 @@
 	{
 		var p1 = position[0]+1;
 		var p2 = config.grid[1]-position[1];
-		element.style.zIndex = p1+p2+(p1>p2?p1:p2);
-		console.log(p1, p2, p1+p2+(p1>p2?p1:p2))
+		element.style.zIndex = p1+p2;
 	}
 	
 	function placeElement(element, position)
@@ -84,10 +83,7 @@
 		if(alternateInstance !== null)
 			clearInterval(alternateInstance);
 		
-		setTimeout(function()
-		{
-			setElementIndex(user.element, user.position);
-		}, MOVE_DURATION);
+		setElementIndex(user.element, user.position);
 		
 		var isRight = false;
 		function alternateLegs()
