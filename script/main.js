@@ -34,7 +34,7 @@
 		
 		x += pos[1] * INNER_SQUARE[0];
 		y += pos[1] * INNER_SQUARE[1];
-		return [x, y]
+		return [x, y];
 	}
 	
 	function setElementIndex(element, position)
@@ -58,8 +58,8 @@
 			var side = "front";
 		else
 			var side = "back";
-		var isSit = false;
 		
+		var isSit = false;
 		for(var i=0; i<config.sit.length; i++)
 		{
 			if(user.position[0] == config.sit[i][0] &&
@@ -69,8 +69,10 @@
 				break;
 			}
 		}
+		
 		user.imgElement.src = "image/characters/" + user.character +
 				"/" + side + (isSit ? "_sit" : "") + ".png";
+		
 		if(user.direction == 0 || user.direction == 1)
 			user.imgElement.style.transform = "scaleX(-1) translateX(50%)";
 		else
@@ -308,7 +310,6 @@
 	
 	run = function()
 	{
-		roomStyle = document.getElementById("room-style");
 		eRoom = document.getElementById("room");
 		eBackground = document.getElementById("background");
 		eBackground.onload = setUpRoom;
