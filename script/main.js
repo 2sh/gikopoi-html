@@ -299,7 +299,8 @@
 		};
 		
 		roomName = "bar";
-		config = JSON.parse(document.getElementById("room-config").textContent);
+		config = JSON.parse(
+			document.getElementById("room-config").textContent);
 		
 		eBackground.src = "rooms/" + roomName + "/" + config.background;
 		scale = ("scale" in config ? config.scale : 1);
